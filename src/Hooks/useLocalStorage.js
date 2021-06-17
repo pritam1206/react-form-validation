@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 export default function useLocalStorage(initialValues) {
   const stored = localStorage.getItem('userInfo')
   const initial = stored ? JSON.parse(stored) : initialValues
-  const [user, setUser] = useState(initial)
+  const [user] = useState(initial)
 
   const register = (value) => {
     const userArray = [...user, value]
