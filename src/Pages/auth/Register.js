@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
  */
 const Register = () => {
   const classes = useStyles()
-  const { register } = useLocalStorage([])
+  const { register, isExist } = useLocalStorage()
   // NavGation to Login if success
   const navigate = useNavigate()
   // submit Form
@@ -43,9 +43,21 @@ const Register = () => {
   const submitHandler = (values) => {
     // Custom class for Registration
     const user = new User(values.name, values.email, values.password)
-    register(user)
-    alert('User registration successfully Done !')
-    navigate('/login', { replace: true })
+    isExist(user)
+      .then((res) => {
+        console.log(res)
+        if (res === undefined) {
+          register(user)
+          alert('User registration successfully Done !')
+          navigate('/login', { replace: true })
+          return
+        }
+        alert('User already register with us !')
+        return
+      })
+      .catch((error) => {
+        console.log(error)
+      })
   }
 
   return (
