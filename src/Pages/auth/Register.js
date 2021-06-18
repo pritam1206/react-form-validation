@@ -46,7 +46,6 @@ const Register = () => {
     const user = new User(values.name, values.email, values.password)
     isExist(user)
       .then((res) => {
-        console.log(res)
         if (res === undefined) {
           register(user)
           alert(ACTIONLABEL.SUCCESS_RES)
