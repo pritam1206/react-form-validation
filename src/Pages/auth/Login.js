@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
+
 import { useNavigate } from 'react-router-dom'
-import { Link as RouterLink } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import * as Yup from 'yup'
 import { Formik } from 'formik'
@@ -15,6 +15,8 @@ import {
 // Componets
 import Button from '../../components/CustomButton'
 import Input from '../../components/CustomInput'
+import ALERT from '../../components/Alert'
+
 import useLocalStorage from '../../Hooks/useLocalStorage'
 import * as ACTIONLABEL from '../../utils/constant'
 const useStyles = makeStyles((theme) => ({
@@ -29,6 +31,8 @@ const useStyles = makeStyles((theme) => ({
 const Login = (props) => {
   const classes = useStyles()
   const { user } = useLocalStorage([])
+  const [isLogin, setLogin] = useState(false)
+  const [alertMessage, setMessage] = useState('')
   // NavGation to  DashboardLayout if success
   const navigate = useNavigate()
 
@@ -41,11 +45,22 @@ const Login = (props) => {
     if (isUser) {
       navigate('/app/dashboard', { replace: true })
     } else {
-      alert(ACTIONLABEL.INVALID_CREDENTIAL)
+      setLogin(true)
+      setMessage(ACTIONLABEL.INVALID_CREDENTIAL)
     }
+  }
+  const handleClose = () => {
+    setLogin(false)
   }
   return (
     <Container maxWidth="xs" className={classes.root}>
+      {isLogin && (
+        <ALERT
+          message={alertMessage}
+          type="warning"
+          handleClose={handleClose}
+        />
+      )}
       <Card>
         <CardContent>
           <Formik
@@ -114,13 +129,7 @@ const Login = (props) => {
                   style={{ textAlign: 'center' }}
                 >
                   Don&apos;t have an account?{' '}
-                  <RouterLink
-                    to="/register"
-                    variant="h6"
-                    style={{ color: 'green' }}
-                  >
-                    {ACTIONLABEL.SIGNUP}
-                  </RouterLink>
+                  <a href="/register">{ACTIONLABEL.SIGNUP}</a>
                 </Typography>
               </form>
             )}

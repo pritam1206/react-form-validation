@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Link as RouterLink } from 'react-router-dom'
 import PropTypes from 'prop-types'
@@ -16,6 +16,7 @@ import {
 import Button from '../../components/CustomButton'
 import Input from '../../components/CustomInput'
 import User from '../../utils/UserRegister'
+import ALERT from '../../components/Alert'
 import * as ACTIONLABEL from '../../utils/constant'
 import useLocalStorage from '../../Hooks/useLocalStorage'
 
@@ -37,6 +38,9 @@ const useStyles = makeStyles((theme) => ({
 const Register = () => {
   const classes = useStyles()
   const { register, isExist } = useLocalStorage()
+  const [isReg, setReg] = useState(false)
+  const [isAvailable, setAvailable] = useState(false)
+  const [alertMessage, setMessage] = useState('')
   // NavGation to Login if success
   const navigate = useNavigate()
   // submit Form
@@ -48,20 +52,39 @@ const Register = () => {
       .then((res) => {
         if (res === undefined) {
           register(user)
-          alert(ACTIONLABEL.SUCCESS_RES)
-          navigate('/login', { replace: true })
+          setMessage(ACTIONLABEL.SUCCESS_RES)
+          setReg(true)
           return
         }
-        alert(ACTIONLABEL.USER_EXISTS)
+        setAvailable(true)
+        setMessage(ACTIONLABEL.USER_EXISTS)
         return
       })
       .catch((error) => {
         console.log(error)
       })
   }
+  const handleClose = () => {
+    if (isAvailable) return setAvailable(false)
+    navigate('/login', { replace: true })
+  }
 
   return (
     <Container maxWidth="xs" className={classes.root}>
+      {isReg && (
+        <ALERT
+          message={alertMessage}
+          type="success"
+          handleClose={handleClose}
+        />
+      )}
+      {isAvailable && (
+        <ALERT
+          message={alertMessage}
+          type="warning"
+          handleClose={handleClose}
+        />
+      )}
       <Card>
         <CardContent>
           <Formik

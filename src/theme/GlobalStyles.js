@@ -19,6 +19,10 @@ const useStyles = makeStyles(() =>
         height: '100%',
         width: '100%',
       },
+      a: {
+        color: 'green',
+        textAlign: 'center',
+      },
       '#root': {
         height: '100%',
         width: '100%',
