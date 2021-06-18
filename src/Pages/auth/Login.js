@@ -16,6 +16,7 @@ import {
 import Button from '../../components/CustomButton'
 import Input from '../../components/CustomInput'
 import useLocalStorage from '../../Hooks/useLocalStorage'
+import * as ACTIONLABEL from '../../utils/constant'
 const useStyles = makeStyles((theme) => ({
   root: {
     // backgroundColor: theme.palette.background.dark,
@@ -40,7 +41,7 @@ const Login = (props) => {
     if (isUser) {
       navigate('/app/dashboard', { replace: true })
     } else {
-      alert('Invalid login')
+      alert(ACTIONLABEL.INVALID_CREDENTIAL)
     }
   }
   return (
@@ -54,10 +55,12 @@ const Login = (props) => {
             }}
             validationSchema={Yup.object().shape({
               email: Yup.string()
-                .email('Must be a valid email')
+                .email(ACTIONLABEL.ERROR_EMAIL)
                 .max(255)
-                .required('Email is required'),
-              password: Yup.string().max(255).required('Password is required'),
+                .required(ACTIONLABEL.REQUIRED_EMAIL),
+              password: Yup.string()
+                .max(255)
+                .required(ACTIONLABEL.REQUIRED_PASSWORD),
             })}
             onSubmit={(values) => submitForm(values)}
           >
@@ -76,12 +79,12 @@ const Login = (props) => {
                     variant="h4"
                     style={{ textAlign: 'center' }}
                   >
-                    Sign in
+                    {ACTIONLABEL.SIGNIN}
                   </Typography>
                 </Box>
                 <Input
                   touched={touched}
-                  label="Email Address"
+                  label={ACTIONLABEL.EMAIL}
                   name="email"
                   type="email"
                   errors={errors}
@@ -90,7 +93,7 @@ const Login = (props) => {
                 />
                 <Input
                   touched={touched}
-                  label="Password"
+                  label={ACTIONLABEL.PASSWORD}
                   name="password"
                   type="password"
                   errors={errors}
@@ -99,7 +102,11 @@ const Login = (props) => {
                 />
 
                 <Box my={2}>
-                  <Button size="large" label="Login" type="submit" />
+                  <Button
+                    size="large"
+                    label={ACTIONLABEL.LOGIN}
+                    type="submit"
+                  />
                 </Box>
                 <Typography
                   color="textSecondary"
@@ -112,7 +119,7 @@ const Login = (props) => {
                     variant="h6"
                     style={{ color: 'green' }}
                   >
-                    Sign up
+                    {ACTIONLABEL.SIGNUP}
                   </RouterLink>
                 </Typography>
               </form>

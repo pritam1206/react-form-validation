@@ -16,6 +16,7 @@ import {
 import Button from '../../components/CustomButton'
 import Input from '../../components/CustomInput'
 import User from '../../utils/UserRegister'
+import * as ACTIONLABEL from '../../utils/constant'
 import useLocalStorage from '../../Hooks/useLocalStorage'
 
 const useStyles = makeStyles((theme) => ({
@@ -48,11 +49,11 @@ const Register = () => {
         console.log(res)
         if (res === undefined) {
           register(user)
-          alert('User registration successfully Done !')
+          alert(ACTIONLABEL.SUCCESS_RES)
           navigate('/login', { replace: true })
           return
         }
-        alert('User already register with us !')
+        alert(ACTIONLABEL.USER_EXISTS)
         return
       })
       .catch((error) => {
@@ -75,15 +76,20 @@ const Register = () => {
               name: Yup.string()
                 .min(3, 'Mininum 2 characters')
                 .max(30, 'Maximum 30 characters')
-                .required('Your name is required'),
+                .required(ACTIONLABEL.REQUIRED_NAME),
               email: Yup.string()
                 .email('Must be a valid email')
                 .max(255)
-                .required('Email is required'),
-              password: Yup.string().max(255).required('Password is required'),
+                .required(ACTIONLABEL.REQUIRED_EMAIL),
+              password: Yup.string()
+                .max(255)
+                .required(ACTIONLABEL.REQUIRED_PASSWORD),
               conpassword: Yup.string()
-                .oneOf([Yup.ref('password'), null], 'Passwords must match')
-                .required('Passwords must match'),
+                .oneOf(
+                  [Yup.ref('password'), null],
+                  ACTIONLABEL.REQUIRED_PASSMATCH,
+                )
+                .required(ACTIONLABEL.REQUIRED_PASSMATCH),
             })}
             onSubmit={(values) => submitHandler(values)}
           >
@@ -103,12 +109,12 @@ const Register = () => {
                     variant="h5"
                     style={{ textAlign: 'center' }}
                   >
-                    Register
+                    {ACTIONLABEL.REGISTER}
                   </Typography>
                 </Box>
                 <Input
                   touched={touched}
-                  label="Use Name"
+                  label={ACTIONLABEL.USERNAME}
                   name="name"
                   type="text"
                   errors={errors}
@@ -117,7 +123,7 @@ const Register = () => {
                 />
                 <Input
                   touched={touched}
-                  label="Email Address"
+                  label={ACTIONLABEL.EMAIL}
                   name="email"
                   type="email"
                   errors={errors}
@@ -126,7 +132,7 @@ const Register = () => {
                 />
                 <Input
                   touched={touched}
-                  label="Password"
+                  label={ACTIONLABEL.PASSWORD}
                   name="password"
                   type="password"
                   errors={errors}
@@ -135,7 +141,7 @@ const Register = () => {
                 />
                 <Input
                   touched={touched}
-                  label="Confirm Password"
+                  label={ACTIONLABEL.CONFIRMPAWWORD}
                   name="conpassword"
                   type="password"
                   errors={errors}
@@ -143,7 +149,11 @@ const Register = () => {
                   handleChange={handleChange}
                 />
                 <Box my={2}>
-                  <Button size="large" label="Register" type="submit" />
+                  <Button
+                    size="large"
+                    label={ACTIONLABEL.REGISTER}
+                    type="submit"
+                  />
                 </Box>
                 <Typography
                   color="textSecondary"
@@ -155,7 +165,7 @@ const Register = () => {
                     variant="h6"
                     style={{ color: '#2FC8D5' }}
                   >
-                    Sign in
+                    {ACTIONLABEL.SIGNIN}
                   </RouterLink>
                 </Typography>
               </form>
